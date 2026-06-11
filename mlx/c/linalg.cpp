@@ -7,7 +7,6 @@
 #include "mlx/c/error.h"
 #include "mlx/c/private/mlx.h"
 #include "mlx/linalg.h"
-#include "mlx/linalg/ops.h"
 
 extern "C" int mlx_linalg_cholesky(
     mlx_array* res,

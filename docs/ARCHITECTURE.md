@@ -646,7 +646,7 @@ Validated against `mlx/c/` golden files using MLX v0.31.2:
 |---|---|---|
 | `ops.h` + `einsum.h` | 239 | ✅ |
 | `fft.h` | 16 | ✅ |
-| `linalg.h` + `linalg/ops.h` | 19 | ✅ |
+| `linalg.h` | 19 | ✅ |
 | `random.h` | 19 | ✅ |
 | `compile.h` + `compile_impl.h` | 7 | ✅ |
 | `io.h` | 10 | ✅ |

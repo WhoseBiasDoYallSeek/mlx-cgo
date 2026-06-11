@@ -49,6 +49,21 @@ extern "C" int mlx_node_namer_get_name(
     return 1;
   }
 }
+extern "C" int mlx_export_to_dot(
+    FILE* os,
+    const mlx_node_namer namer,
+    const mlx_vector_array outputs) {
+  try {
+    mlx::core::export_to_dot(
+        CFileOutputStream::as_lvalue(CFileOutputStream(os)),
+        mlx_node_namer_get_(namer),
+        mlx_vector_array_get_(outputs));
+    return 0;
+  } catch (std::exception& e) {
+    mlx_error(e.what());
+    return 1;
+  }
+}
 extern "C" int mlx_print_graph(
     FILE* os,
     const mlx_node_namer namer,

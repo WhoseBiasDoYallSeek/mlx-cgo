@@ -73,6 +73,7 @@ fmt_write "$REPO_ROOT/mlx/c/map.h"      --type=map
 fmt_write "$REPO_ROOT/mlx/c/map.cpp"    --type=map    --implementation
 fmt_write "$REPO_ROOT/mlx/c/closure.h"  --type=closure
 fmt_write "$REPO_ROOT/mlx/c/closure.cpp" --type=closure --implementation
+fmt_write "$REPO_ROOT/mlx/c/private/closure.h" --type=closure-private
 
 # Private headers — one per opaque type.
 # Each entry is: ctype|cpptype|nocopy|using
@@ -81,15 +82,14 @@ declare -a PRIVATE_TYPES=(
   "mlx_array|mlx::core::array||"
   "mlx_stream|mlx::core::Stream||"
   "mlx_device;mlx_device_info|mlx::core::Device;std::unordered_map<std::string, std::variant<std::string, size_t>>||;mlx_device_info_cpp"
-  "mlx_closure|std::function<std::vector<array>(std::vector<array>)>||"
-  "mlx_closure_value_and_grad|std::function<std::pair<std::vector<array>, std::vector<array>>(const std::vector<array>&)>||"
-  "mlx_closure_custom|std::function<std::vector<array>(std::vector<array>,std::vector<array>,std::vector<array>)>||"
-  "mlx_closure_custom_jvp|std::function<std::vector<array>(std::vector<array>,std::vector<array>,std::vector<int>)>||"
-  "mlx_closure_custom_vmap|std::function<std::pair<std::vector<array>, std::vector<int>>(std::vector<array>,std::vector<int>)>||"
-  "mlx_vector_array|std::vector<array>||"
+  "mlx_closure_value_and_grad|std::function<std::pair<std::vector<mlx::core::array>, std::vector<mlx::core::array>>(const std::vector<mlx::core::array>&)>||"
+  "mlx_closure_custom|std::function<std::vector<mlx::core::array>(std::vector<mlx::core::array>,std::vector<mlx::core::array>,std::vector<mlx::core::array>)>||"
+  "mlx_closure_custom_jvp|std::function<std::vector<mlx::core::array>(std::vector<mlx::core::array>,std::vector<mlx::core::array>,std::vector<int>)>||"
+  "mlx_closure_custom_vmap|std::function<std::pair<std::vector<mlx::core::array>, std::vector<int>>(std::vector<mlx::core::array>,std::vector<int>)>||"
+  "mlx_vector_array|std::vector<mlx::core::array>||"
   "mlx_vector_int|std::vector<int>||"
   "mlx_vector_string|std::vector<std::string>||"
-  "mlx_map_string_to_array|std::unordered_map<std::string, array>||"
+  "mlx_map_string_to_array|std::unordered_map<std::string, mlx::core::array>||"
   "mlx_map_string_to_string|std::unordered_map<std::string, std::string>||"
   "mlx_distributed_group|mlx::core::distributed::Group|no-copy|"
 )
@@ -128,7 +128,7 @@ echo "Generating C bindings from $MLX_SOURCE..."
 dynamic_headers=(
   "ops|$MLX_SOURCE/ops.h;$MLX_SOURCE/einsum.h|Core array operations"
   "fft|$MLX_SOURCE/fft.h|FFT operations"
-  "linalg|$MLX_SOURCE/linalg.h;$MLX_SOURCE/linalg/ops.h|Linear algebra operations"
+  "linalg|$MLX_SOURCE/linalg.h|Linear algebra operations"
   "random|$MLX_SOURCE/random.h|Random number operations"
   "fast|$MLX_SOURCE/fast.h|Fast custom operations"
   "transforms|$MLX_SOURCE/transforms.h|Transform operations"

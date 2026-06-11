@@ -131,10 +131,9 @@ func TestRegressionPrivateDevice(t *testing.T) {
 }
 
 func TestRegressionPrivateClosure(t *testing.T) {
-	runPrivateRegressionTest(t, "closure",
-		"mlx_closure",
-		"std::function<std::vector<array>(std::vector<array>)>",
-		false, "")
+	runRegressionTest(t, "private/closure.h", func(b *bytes.Buffer) {
+		codegen.GenerateClosurePrivate(b)
+	})
 }
 
 func TestRegressionVectorHeader(t *testing.T) {

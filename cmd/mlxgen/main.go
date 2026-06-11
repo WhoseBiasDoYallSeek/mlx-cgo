@@ -89,6 +89,8 @@ func main() {
 			} else {
 				codegen.GenerateClosureHeader(os.Stdout)
 			}
+		case "closure-private":
+			codegen.GenerateClosurePrivate(os.Stdout)
 		case "private":
 			if *privCtype == "" || *privCpptype == "" {
 				fmt.Fprintln(os.Stderr, "error: --type=private requires --ctype and --cpptype")

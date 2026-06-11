@@ -8,7 +8,7 @@
 #include "mlx/c/error.h"
 #include "mlx/c/private/mlx.h"
 
-extern "C" int mlx_cuda_is_available(bool* res) {
+extern "C" int mlx_cu_is_available(bool* res) {
   try {
     *res = mlx::core::cu::is_available();
   } catch (std::exception& e) {

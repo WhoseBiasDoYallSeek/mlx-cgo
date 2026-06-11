@@ -28,7 +28,7 @@ extern "C" {
  */
 /**@{*/
 
-int mlx_cuda_is_available(bool* res);
+int mlx_cu_is_available(bool* res);
 
 /**@}*/
 

@@ -14,67 +14,74 @@ inline mlx_closure_value_and_grad mlx_closure_value_and_grad_new_() {
 }
 
 inline mlx_closure_value_and_grad mlx_closure_value_and_grad_new_(
-    const std::function<std::pair<std::vector<array>, std::vector<array>>(
-        const std::vector<array>&)>& s) {
-  return mlx_closure_value_and_grad(
-      {new std::function<std::pair<std::vector<array>, std::vector<array>>(
-          const std::vector<array>&)>(s)});
+    const std::function<
+        std::pair<std::vector<mlx::core::array>, std::vector<mlx::core::array>>(
+            const std::vector<mlx::core::array>&)>& s) {
+  return mlx_closure_value_and_grad({new std::function<
+      std::pair<std::vector<mlx::core::array>, std::vector<mlx::core::array>>(
+          const std::vector<mlx::core::array>&)>(s)});
 }
 
 inline mlx_closure_value_and_grad mlx_closure_value_and_grad_new_(
-    std::function<std::pair<std::vector<array>, std::vector<array>>(
-        const std::vector<array>&)>&& s) {
-  return mlx_closure_value_and_grad(
-      {new std::function<std::pair<std::vector<array>, std::vector<array>>(
-          const std::vector<array>&)>(std::move(s))});
+    std::function<
+        std::pair<std::vector<mlx::core::array>, std::vector<mlx::core::array>>(
+            const std::vector<mlx::core::array>&)>&& s) {
+  return mlx_closure_value_and_grad({new std::function<
+      std::pair<std::vector<mlx::core::array>, std::vector<mlx::core::array>>(
+          const std::vector<mlx::core::array>&)>(std::move(s))});
 }
 
 inline mlx_closure_value_and_grad& mlx_closure_value_and_grad_set_(
     mlx_closure_value_and_grad& d,
-    const std::function<std::pair<std::vector<array>, std::vector<array>>(
-        const std::vector<array>&)>& s) {
+    const std::function<
+        std::pair<std::vector<mlx::core::array>, std::vector<mlx::core::array>>(
+            const std::vector<mlx::core::array>&)>& s) {
   if (d.ctx) {
-    *static_cast<
-        std::function<std::pair<std::vector<array>, std::vector<array>>(
-            const std::vector<array>&)>*>(d.ctx) = s;
+    *static_cast<std::function<
+        std::pair<std::vector<mlx::core::array>, std::vector<mlx::core::array>>(
+            const std::vector<mlx::core::array>&)>*>(d.ctx) = s;
   } else {
-    d.ctx = new std::function<std::pair<std::vector<array>, std::vector<array>>(
-        const std::vector<array>&)>(s);
+    d.ctx = new std::function<
+        std::pair<std::vector<mlx::core::array>, std::vector<mlx::core::array>>(
+            const std::vector<mlx::core::array>&)>(s);
   }
   return d;
 }
 
 inline mlx_closure_value_and_grad& mlx_closure_value_and_grad_set_(
     mlx_closure_value_and_grad& d,
-    std::function<std::pair<std::vector<array>, std::vector<array>>(
-        const std::vector<array>&)>&& s) {
+    std::function<
+        std::pair<std::vector<mlx::core::array>, std::vector<mlx::core::array>>(
+            const std::vector<mlx::core::array>&)>&& s) {
   if (d.ctx) {
-    *static_cast<
-        std::function<std::pair<std::vector<array>, std::vector<array>>(
-            const std::vector<array>&)>*>(d.ctx) = std::move(s);
+    *static_cast<std::function<
+        std::pair<std::vector<mlx::core::array>, std::vector<mlx::core::array>>(
+            const std::vector<mlx::core::array>&)>*>(d.ctx) = std::move(s);
   } else {
-    d.ctx = new std::function<std::pair<std::vector<array>, std::vector<array>>(
-        const std::vector<array>&)>(std::move(s));
+    d.ctx = new std::function<
+        std::pair<std::vector<mlx::core::array>, std::vector<mlx::core::array>>(
+            const std::vector<mlx::core::array>&)>(std::move(s));
   }
   return d;
 }
 
-inline std::function<std::pair<std::vector<array>, std::vector<array>>(
-    const std::vector<array>&)>&
+inline std::function<
+    std::pair<std::vector<mlx::core::array>, std::vector<mlx::core::array>>(
+        const std::vector<mlx::core::array>&)>&
 mlx_closure_value_and_grad_get_(mlx_closure_value_and_grad d) {
   if (!d.ctx) {
     throw std::runtime_error("expected a non-empty mlx_closure_value_and_grad");
   }
-  return *static_cast<
-      std::function<std::pair<std::vector<array>, std::vector<array>>(
-          const std::vector<array>&)>*>(d.ctx);
+  return *static_cast<std::function<
+      std::pair<std::vector<mlx::core::array>, std::vector<mlx::core::array>>(
+          const std::vector<mlx::core::array>&)>*>(d.ctx);
 }
 
 inline void mlx_closure_value_and_grad_free_(mlx_closure_value_and_grad d) {
   if (d.ctx) {
-    delete static_cast<
-        std::function<std::pair<std::vector<array>, std::vector<array>>(
-            const std::vector<array>&)>*>(d.ctx);
+    delete static_cast<std::function<
+        std::pair<std::vector<mlx::core::array>, std::vector<mlx::core::array>>(
+            const std::vector<mlx::core::array>&)>*>(d.ctx);
   }
 }
 

@@ -42,6 +42,10 @@ int mlx_node_namer_get_name(
     const char** name,
     mlx_node_namer namer,
     const mlx_array arr);
+int mlx_export_to_dot(
+    FILE* os,
+    const mlx_node_namer namer,
+    const mlx_vector_array outputs);
 
 int mlx_print_graph(
     FILE* os,

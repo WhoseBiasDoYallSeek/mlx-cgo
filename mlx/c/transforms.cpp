@@ -46,7 +46,7 @@ extern "C" int mlx_custom_function(
     auto vmap = fun_vmap.ctx
         ? std::make_optional(mlx_closure_custom_vmap_get_(fun_vmap))
         : std::nullopt;
-    auto result = mlx::core::custom(fn, vjp, jvp, vmap);
+    auto result = mlx::core::custom_function(fn, vjp, jvp, vmap);
     mlx_closure_set_(*res, result);
     return 0;
   } catch (std::exception& e) {

@@ -45,32 +45,6 @@ extern "C" int mlx_export_function_kwargs(
   return 0;
 }
 
-struct mlx_function_exporter_cpp_ {
-  mlx::core::FunctionExporter xfunc;
-  mlx_function_exporter_cpp_(mlx::core::FunctionExporter xfunc)
-      : xfunc(std::move(xfunc)) {};
-};
-
-inline mlx_function_exporter mlx_function_exporter_new_(
-    mlx::core::FunctionExporter xfunc) {
-  return mlx_function_exporter(
-      {new mlx_function_exporter_cpp_(std::move(xfunc))});
-}
-
-inline mlx::core::FunctionExporter& mlx_function_exporter_get_(
-    mlx_function_exporter d) {
-  if (!d.ctx) {
-    throw std::runtime_error("expected a non-empty mlx_function_exporter");
-  }
-  return static_cast<mlx_function_exporter_cpp_*>(d.ctx)->xfunc;
-}
-
-inline void mlx_function_exporter_free_(mlx_function_exporter d) {
-  if (d.ctx) {
-    delete static_cast<mlx_function_exporter_cpp_*>(d.ctx);
-  }
-}
-
 extern "C" mlx_function_exporter mlx_function_exporter_new(
     const char* file,
     const mlx_closure fun,
@@ -118,32 +92,6 @@ extern "C" int mlx_function_exporter_apply_kwargs(
   } catch (std::exception& e) {
     mlx_error(e.what());
     return 1;
-  }
-}
-
-struct mlx_imported_function_cpp_ {
-  mlx::core::ImportedFunction ifunc;
-  mlx_imported_function_cpp_(mlx::core::ImportedFunction ifunc)
-      : ifunc(std::move(ifunc)) {};
-};
-
-inline mlx_imported_function mlx_imported_function_new_(
-    mlx::core::ImportedFunction ifunc) {
-  return mlx_imported_function(
-      {new mlx_imported_function_cpp_(std::move(ifunc))});
-}
-
-inline mlx::core::ImportedFunction& mlx_imported_function_get_(
-    mlx_imported_function d) {
-  if (!d.ctx) {
-    throw std::runtime_error("expected a non-empty mlx_imported_function");
-  }
-  return static_cast<mlx_imported_function_cpp_*>(d.ctx)->ifunc;
-}
-
-inline void mlx_imported_function_free_(mlx_imported_function d) {
-  if (d.ctx) {
-    delete static_cast<mlx_imported_function_cpp_*>(d.ctx);
   }
 }
 

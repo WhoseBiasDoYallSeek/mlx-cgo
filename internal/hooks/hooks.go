@@ -496,6 +496,21 @@ extern "C" int mlx_node_namer_get_name(
     mlx_error(e.what());
     return 1;
   }
+}
+extern "C" int mlx_export_to_dot(
+    FILE* os,
+    const mlx_node_namer namer,
+    const mlx_vector_array outputs) {
+  try {
+    mlx::core::export_to_dot(
+        CFileOutputStream::as_lvalue(CFileOutputStream(os)),
+        mlx_node_namer_get_(namer),
+        mlx_vector_array_get_(outputs));
+    return 0;
+  } catch (std::exception& e) {
+    mlx_error(e.what());
+    return 1;
+  }
 }`
 	} else {
 		code = `typedef struct mlx_node_namer_ {
@@ -512,6 +527,10 @@ int mlx_node_namer_get_name(
     const char** name,
     mlx_node_namer namer,
     const mlx_array arr);
+int mlx_export_to_dot(
+    FILE* os,
+    const mlx_node_namer namer,
+    const mlx_vector_array outputs);
 `
 	}
 	return Result{Code: code, Handled: true}
@@ -534,7 +553,7 @@ func hookCustomFunction(impl bool) Result {
     auto vjp = fun_vjp.ctx ? std::make_optional(mlx_closure_custom_get_(fun_vjp)) : std::nullopt;
     auto jvp = fun_jvp.ctx ? std::make_optional(mlx_closure_custom_jvp_get_(fun_jvp)) : std::nullopt;
     auto vmap = fun_vmap.ctx ? std::make_optional(mlx_closure_custom_vmap_get_(fun_vmap)) : std::nullopt;
-    auto result = mlx::core::custom(fn, vjp, jvp, vmap);
+    auto result = mlx::core::custom_function(fn, vjp, jvp, vmap);
     mlx_closure_set_(*res, result);
     return 0;
   } catch (std::exception& e) {
@@ -626,32 +645,6 @@ extern "C" int mlx_export_function_kwargs(
   return 0;
 }
 
-struct mlx_function_exporter_cpp_ {
-  mlx::core::FunctionExporter xfunc;
-  mlx_function_exporter_cpp_(mlx::core::FunctionExporter xfunc)
-      : xfunc(std::move(xfunc)) {};
-};
-
-inline mlx_function_exporter mlx_function_exporter_new_(
-    mlx::core::FunctionExporter xfunc) {
-  return mlx_function_exporter(
-      {new mlx_function_exporter_cpp_(std::move(xfunc))});
-}
-
-inline mlx::core::FunctionExporter& mlx_function_exporter_get_(
-    mlx_function_exporter d) {
-  if (!d.ctx) {
-    throw std::runtime_error("expected a non-empty mlx_function_exporter");
-  }
-  return static_cast<mlx_function_exporter_cpp_*>(d.ctx)->xfunc;
-}
-
-inline void mlx_function_exporter_free_(mlx_function_exporter d) {
-  if (d.ctx) {
-    delete static_cast<mlx_function_exporter_cpp_*>(d.ctx);
-  }
-}
-
 extern "C" mlx_function_exporter mlx_function_exporter_new(
     const char* file,
     const mlx_closure fun,
@@ -698,32 +691,6 @@ extern "C" int mlx_function_exporter_apply_kwargs(
   } catch (std::exception& e) {
     mlx_error(e.what());
     return 1;
-  }
-}
-
-struct mlx_imported_function_cpp_ {
-  mlx::core::ImportedFunction ifunc;
-  mlx_imported_function_cpp_(mlx::core::ImportedFunction ifunc)
-      : ifunc(std::move(ifunc)) {};
-};
-
-inline mlx_imported_function mlx_imported_function_new_(
-    mlx::core::ImportedFunction ifunc) {
-  return mlx_imported_function(
-      {new mlx_imported_function_cpp_(std::move(ifunc))});
-}
-
-inline mlx::core::ImportedFunction& mlx_imported_function_get_(
-    mlx_imported_function d) {
-  if (!d.ctx) {
-    throw std::runtime_error("expected a non-empty mlx_imported_function");
-  }
-  return static_cast<mlx_imported_function_cpp_*>(d.ctx)->ifunc;
-}
-
-inline void mlx_imported_function_free_(mlx_imported_function d) {
-  if (d.ctx) {
-    delete static_cast<mlx_imported_function_cpp_*>(d.ctx);
   }
 }
 

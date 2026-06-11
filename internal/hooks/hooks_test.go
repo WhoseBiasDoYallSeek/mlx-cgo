@@ -125,6 +125,9 @@ func TestHookExportToDot_Header(t *testing.T) {
 	if !strings.Contains(r.Code, "mlx_node_namer_get_name") {
 		t.Error("header should declare get_name")
 	}
+	if !strings.Contains(r.Code, "mlx_export_to_dot") {
+		t.Error("header should declare mlx_export_to_dot")
+	}
 }
 
 func TestHookExportToDot_Impl(t *testing.T) {
@@ -133,10 +136,13 @@ func TestHookExportToDot_Impl(t *testing.T) {
 		t.Error("impl should use mlx::core::NodeNamer")
 	}
 	// Impl should contain all 4 function implementations
-	for _, fn := range []string{"mlx_node_namer_new", "mlx_node_namer_free", "mlx_node_namer_set_name", "mlx_node_namer_get_name"} {
+	for _, fn := range []string{"mlx_node_namer_new", "mlx_node_namer_free", "mlx_node_namer_set_name", "mlx_node_namer_get_name", "mlx_export_to_dot"} {
 		if !strings.Contains(r.Code, fn) {
 			t.Errorf("impl missing function: %s", fn)
 		}
+	}
+	if !strings.Contains(r.Code, "CFileOutputStream::as_lvalue") {
+		t.Error("impl should stream the DOT export through CFileOutputStream")
 	}
 }
 
@@ -160,8 +166,8 @@ func TestHookCustomFunction_Header(t *testing.T) {
 
 func TestHookCustomFunction_Impl(t *testing.T) {
 	r := Apply("mlx_custom_function", true)
-	if !strings.Contains(r.Code, "mlx::core::custom") {
-		t.Error("impl should call mlx::core::custom")
+	if !strings.Contains(r.Code, "mlx::core::custom_function") {
+		t.Error("impl should call mlx::core::custom_function")
 	}
 	if !strings.Contains(r.Code, "std::nullopt") {
 		t.Error("impl should handle optional parameters with std::nullopt")
@@ -250,6 +256,14 @@ func TestApplyModule_Export_Impl(t *testing.T) {
 	}
 	if !strings.Contains(code, "mlx_export_function") {
 		t.Error("export impl should implement mlx_export_function")
+	}
+	if strings.Contains(code, "struct mlx_function_exporter_cpp_") ||
+		strings.Contains(code, "struct mlx_imported_function_cpp_") ||
+		strings.Contains(code, "inline mlx_function_exporter mlx_function_exporter_new_(") ||
+		strings.Contains(code, "inline mlx_imported_function mlx_imported_function_new_(") ||
+		strings.Contains(code, "inline mlx::core::FunctionExporter& mlx_function_exporter_get_") ||
+		strings.Contains(code, "inline mlx::core::ImportedFunction& mlx_imported_function_get_") {
+		t.Error("export impl should not redefine private inline helper wrappers")
 	}
 }
 
